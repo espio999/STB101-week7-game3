@@ -1,0 +1,64 @@
+---
+title: "gasoline mileage"
+output: html_notebook
+---
+
+```{r setup}
+library(readxl)
+Book3 <- read_excel("Book3.xlsx", range = "a13:b23")
+
+valA = c(Book3$`Program A`)
+valB = c(Book3$`Program B`)
+```
+
+## assumption
+H0: variance of A and B is equal.  
+H1: not H0.  
+significant level: 5%  
+
+## 1. Check if equal variances or not (F test)
+```{r}
+var.test(valA, valB)
+```
+F test shows variance of A and B is equal.  
+P value (0.3818) is greater than 5%.  H0 is not rejected.
+
+## 2. If equal variance, use 2 samples T test with equal variances
+### assumption
+H0: mean of A and B is equal.  
+H1: not H0  
+significant level: 5%  
+Variance of A and B is equal.  
+
+```{r}
+t.test(valA, valB, var.equal = T)
+```
+T test shows mean of A and B is not equal.  
+P value (0.00526) is less than 5%.  H0 is rejected.  
+
+### assumption
+H0: mean of A and B is equal.  
+H1: mileage of A is better than B -> mean of A is greater than B.  
+significant level: 5%  
+Variance of A and B is equal.  
+
+```{r}
+t.test(valA, valB, var.equal = T, alternative = "greater")
+```
+T test shows mean of A and B is not equal.  
+P value (0.00263) is less than 5%.  H0 is rejected.  
+
+### assumption
+H0: mean of A and B is equal.  
+H1: mileage of B is better than A -> mean of A is smaller than B.  
+significant level: 5%  
+Variance of A and B is equal.  
+
+```{r}
+t.test(valA, valB, var.equal = T, alternative = "less")
+```
+T test shows mean of A and B is not equal.  
+P value (0.9974) is greater than 5%.  H0 is not rejected.  
+
+## conclusion
+Program A has positive impact to Program B.
